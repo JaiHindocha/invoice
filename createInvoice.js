@@ -44,8 +44,10 @@ function generateCustomerInformation(doc, invoice) {
     subtotal = subtotal + (item.sp * item.quantity);
   }
   var balance = 0;
+  var prepaid = "Pre Paid";
   if (invoice.paid == 0){
     balance = subtotal;
+    prepaid = "Pay on Delivery";
   }
 
   doc
@@ -63,6 +65,12 @@ function generateCustomerInformation(doc, invoice) {
       150,
       customerInformationTop + 30
     )
+    .text("Payment Type:", 50, customerInformationTop + 45)
+    .text(
+      prepaid,
+      150,
+      customerInformationTop + 45
+    )
 
     .font("Roboto-Bold")
     .text(invoice.shipping.name, 300, customerInformationTop)
@@ -79,12 +87,12 @@ function generateCustomerInformation(doc, invoice) {
     )
     .moveDown();
 
-  generateHr(doc, 252);
+  generateHr(doc, 267);
 }
 
 function generateInvoiceTable(doc, invoice) {
   let i;
-  const invoiceTableTop = 290;
+  const invoiceTableTop = 330;
 
   doc.font("Roboto-Bold");
   generateTableRow(
