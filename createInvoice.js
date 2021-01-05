@@ -43,6 +43,10 @@ function generateCustomerInformation(doc, invoice) {
     const item = invoice.items[i];
     subtotal = subtotal + (item.sp * item.quantity);
   }
+  var balance = 0;
+  if (invoice.paid == 0){
+    balance = subtotal;
+  }
 
   doc
     .fontSize(10)
@@ -52,9 +56,10 @@ function generateCustomerInformation(doc, invoice) {
     .font("Roboto")
     .text("Invoice Date:", 50, customerInformationTop + 15)
     .text(formatDate(new Date()), 150, customerInformationTop + 15)
+    
     .text("Balance Due:", 50, customerInformationTop + 30)
     .text(
-      formatCurrency(subtotal),
+      formatCurrency(balance),
       150,
       customerInformationTop + 30
     )
@@ -142,7 +147,7 @@ function generateInvoiceTable(doc, invoice) {
     formatCurrency(invmrp)
   );
   
-  const taxPrice = mrpDiscount + 45;
+  const taxPrice = mrpDiscount + 65;
   generateTableRow(
     doc,
     taxPrice,
@@ -155,7 +160,20 @@ function generateInvoiceTable(doc, invoice) {
   );
   doc.font("Roboto");
 
-  const duePosition = mrpDiscount + 65;
+  const totalwithouttax = mrpDiscount + 45;
+  generateTableRow(
+    doc,
+    totalwithouttax,
+    "",
+    "",
+    "",
+    "",
+    "Subtotal w/o Tax",
+    formatCurrency(invmrp - tax)
+  );
+  doc.font("Roboto");
+
+  const duePosition = mrpDiscount + 85;
   doc.font("Roboto-Bold");
   generateTableRow(
     doc,
