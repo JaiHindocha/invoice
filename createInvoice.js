@@ -169,7 +169,7 @@ function generateInvoiceTable(doc, invoice) {
     "",
     "",
     "Subtotal w/o Tax",
-    formatCurrency(invmrp - tax)
+    formatCurrency(subtotal - tax)
   );
   doc.font("Roboto");
 
