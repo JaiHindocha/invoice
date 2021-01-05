@@ -14,14 +14,14 @@ const invoice = {
       mrp: 100,
       sp: 80,
       quantity: 2,
-      gst: 0.12
+      gst: 12
     },
     {
       item: "USB_EXT",
       mrp: 200,
       sp: 160,      
       quantity: 1,
-      gst: 0.05
+      gst: 5
     }
   ],
   // subtotal: 200,

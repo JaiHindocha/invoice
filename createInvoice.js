@@ -84,7 +84,7 @@ function generateCustomerInformation(doc, invoice) {
 
 function generateInvoiceTable(doc, invoice) {
   let i;
-  const invoiceTableTop = 330;
+  const invoiceTableTop = 290;
 
   doc.font("Roboto-Bold");
   generateTableRow(
@@ -103,27 +103,104 @@ function generateInvoiceTable(doc, invoice) {
   var invmrp = 0;
   var tax = 0;
   var subtotal = 0;
+  var position = invoiceTableTop+30;
+  // var height = doc.heightOfString(invoice.items[i].item, {width: 120});
+
   for (i = 0; i < invoice.items.length; i++) {
+
+    if(position > doc.page.height-100){
+      doc.addPage();
+      position = 50;
+    }
     const item = invoice.items[i];
-    const position = invoiceTableTop + (i + 1) * 30;
+    
     invmrp = invmrp + (item.mrp * item.quantity);
     subtotal = subtotal + (item.sp * item.quantity);
-    tax = tax + (item.sp * item.gst * item.quantity);
+    tax = tax + (item.sp * (item.gst/100) * item.quantity);
+    
     generateTableRow(
       doc,
       position,
       item.item,
       item.mrp,
       item.sp,
-      item.sp * (1-item.gst),
+      item.sp * (1-(item.gst/100)),
       item.quantity,
-      formatCurrency(item.sp * item.quantity)
+      formatCurrency((item.sp * (1-(item.gst/100))) * item.quantity)
     );
+    var height = doc.heightOfString(item.item, {width: 120});
+    generateHr(doc, position + height + 10);
+    position = position + height + 20;
 
-    generateHr(doc, position + 20);
+  }
+  position += 20;
+
+  if(position > doc.page.height-100){
+    doc.addPage();
+    position = 50;
   }
 
-  const savings = (invoiceTableTop + (i + 1) * 30) + 20;
+  const subtotalfield = position;
+  generateTableRow(
+    doc,
+    subtotalfield,
+    "",
+    "",
+    "",
+    "",
+    "Subtotal",
+    formatCurrency(subtotal - tax)
+  );
+
+  position += 20;
+
+  if(position > doc.page.height-100){
+    doc.addPage();
+    position = 50;
+  }
+  
+  const taxPrice = position;
+  generateTableRow(
+    doc,
+    taxPrice,
+    "",
+    "",
+    "",
+    "",
+    "GST",
+    formatCurrency(tax)
+  );
+  doc.font("Roboto");
+
+  position += 20;
+
+  if(position > doc.page.height-100){
+    doc.addPage();
+    position = 50;
+  }
+
+  const duePosition = position;
+  doc.font("Roboto-Bold");
+  generateTableRow(
+    doc,
+    duePosition,
+    "",
+    "",
+    "",
+    "",
+    "Grand Total",
+    formatCurrency(subtotal)
+  );
+  doc.font("Roboto");
+
+  position += 20;
+
+  if(position > doc.page.height-100){
+    doc.addPage();
+    position = 50;
+  }
+
+  const savings = position;
   generateTableRow(
     doc,
     savings,
@@ -134,58 +211,6 @@ function generateInvoiceTable(doc, invoice) {
     "Savings",
     formatCurrency(invmrp - subtotal)
   );
-
-  const mrpDiscount = savings - 20;
-  generateTableRow(
-    doc,
-    mrpDiscount,
-    "",
-    "",
-    "",
-    "",
-    "MRP Total",
-    formatCurrency(invmrp)
-  );
-  
-  const taxPrice = mrpDiscount + 65;
-  generateTableRow(
-    doc,
-    taxPrice,
-    "",
-    "",
-    "",
-    "",
-    "Tax",
-    formatCurrency(tax)
-  );
-  doc.font("Roboto");
-
-  const totalwithouttax = mrpDiscount + 45;
-  generateTableRow(
-    doc,
-    totalwithouttax,
-    "",
-    "",
-    "",
-    "",
-    "Subtotal w/o Tax",
-    formatCurrency(subtotal - tax)
-  );
-  doc.font("Roboto");
-
-  const duePosition = mrpDiscount + 85;
-  doc.font("Roboto-Bold");
-  generateTableRow(
-    doc,
-    duePosition,
-    "",
-    "",
-    "",
-    "",
-    "Subtotal",
-    formatCurrency(subtotal)
-  );
-  doc.font("Roboto");
 }
 
 // function generateFooter(doc) {
@@ -211,8 +236,8 @@ function generateTableRow(
 ) {
   doc
     .fontSize(10)
-    .text(item, 50, y)
-    .text(mrp, 150, y, { width: 70, align: "right" })
+    .text(item, 50, y,{ width: 120, align: "left" })
+    .text(mrp, 170, y, { width: 50, align: "right" })
     .text(sp, 220, y, { width: 100, align: "right" })
     .text(gst, 320, y, { width: 100, align: "right" })
     .text(quantity, 400, y, { width: 80, align: "right" })
