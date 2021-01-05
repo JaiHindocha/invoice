@@ -38,6 +38,12 @@ function generateCustomerInformation(doc, invoice) {
 
   const customerInformationTop = 200;
 
+  var subtotal = 0;
+  for (i = 0; i < invoice.items.length; i++) {
+    const item = invoice.items[i];
+    subtotal = subtotal + (item.sp * item.quantity);
+  }
+
   doc
     .fontSize(10)
     .text("Invoice Number:", 50, customerInformationTop)
@@ -46,15 +52,12 @@ function generateCustomerInformation(doc, invoice) {
     .font("Roboto")
     .text("Invoice Date:", 50, customerInformationTop + 15)
     .text(formatDate(new Date()), 150, customerInformationTop + 15)
-    // .text("Balance Due:", 50, customerInformationTop + 30)
-    // // .font("Rupee")
-    // // .text("\u20b9",145,customerInformationTop + 27)
-    // // .font("Roboto")
-    // .text(
-    //   formatCurrency(subtotal - invoice.paid),
-    //   150,
-    //   customerInformationTop + 30
-    // )
+    .text("Balance Due:", 50, customerInformationTop + 30)
+    .text(
+      formatCurrency(subtotal),
+      150,
+      customerInformationTop + 30
+    )
 
     .font("Roboto-Bold")
     .text(invoice.shipping.name, 300, customerInformationTop)
