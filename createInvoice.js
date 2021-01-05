@@ -103,7 +103,7 @@ function generateInvoiceTable(doc, invoice) {
     const position = invoiceTableTop + (i + 1) * 30;
     invmrp = invmrp + (item.mrp * item.quantity);
     subtotal = subtotal + (item.sp * item.quantity);
-    tax = tax + (item.sp * (item.gst));
+    tax = tax + (item.sp * item.gst * item.quantity);
     generateTableRow(
       doc,
       position,
