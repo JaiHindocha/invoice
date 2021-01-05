@@ -24,7 +24,7 @@ const invoice = {
       gst: 0.05
     }
   ],
-  subtotal: 200,
+  // subtotal: 200,
   paid: 0,
   invoice_nr: 1234
 };

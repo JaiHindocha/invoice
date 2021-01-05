@@ -46,15 +46,15 @@ function generateCustomerInformation(doc, invoice) {
     .font("Roboto")
     .text("Invoice Date:", 50, customerInformationTop + 15)
     .text(formatDate(new Date()), 150, customerInformationTop + 15)
-    .text("Balance Due:", 50, customerInformationTop + 30)
-    // .font("Rupee")
-    // .text("\u20b9",145,customerInformationTop + 27)
-    // .font("Roboto")
-    .text(
-      formatCurrency(invoice.subtotal - invoice.paid),
-      150,
-      customerInformationTop + 30
-    )
+    // .text("Balance Due:", 50, customerInformationTop + 30)
+    // // .font("Rupee")
+    // // .text("\u20b9",145,customerInformationTop + 27)
+    // // .font("Roboto")
+    // .text(
+    //   formatCurrency(subtotal - invoice.paid),
+    //   150,
+    //   customerInformationTop + 30
+    // )
 
     .font("Roboto-Bold")
     .text(invoice.shipping.name, 300, customerInformationTop)
@@ -94,11 +94,13 @@ function generateInvoiceTable(doc, invoice) {
 
   var invmrp = 0;
   var tax = 0;
+  var subtotal = 0;
   for (i = 0; i < invoice.items.length; i++) {
     const item = invoice.items[i];
     const position = invoiceTableTop + (i + 1) * 30;
     invmrp = invmrp + (item.mrp * item.quantity);
-    tax = tax + (item.sp * (1-item.gst));
+    subtotal = subtotal + (item.sp * item.quantity);
+    tax = tax + (item.sp * (item.gst));
     generateTableRow(
       doc,
       position,
@@ -122,7 +124,7 @@ function generateInvoiceTable(doc, invoice) {
     "",
     "",
     "Savings",
-    formatCurrency(invmrp - invoice.subtotal)
+    formatCurrency(invmrp - subtotal)
   );
 
   const mrpDiscount = savings - 20;
@@ -160,7 +162,7 @@ function generateInvoiceTable(doc, invoice) {
     "",
     "",
     "Subtotal",
-    formatCurrency(invoice.subtotal)
+    formatCurrency(subtotal)
   );
   doc.font("Roboto");
 }
