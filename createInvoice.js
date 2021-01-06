@@ -147,6 +147,8 @@ function generateInvoiceTable(doc, invoice) {
 
   if(position > doc.page.height-100){
     doc.addPage();
+    doc
+        .fillColor("#444444");
     position = 50;
   }
 
@@ -166,6 +168,8 @@ function generateInvoiceTable(doc, invoice) {
 
   if(position > doc.page.height-100){
     doc.addPage();
+    doc
+        .fillColor("#444444");
     position = 50;
   }
   
@@ -186,6 +190,8 @@ function generateInvoiceTable(doc, invoice) {
 
   if(position > doc.page.height-100){
     doc.addPage();
+    doc
+        .fillColor("#444444");
     position = 50;
   }
 
@@ -207,6 +213,8 @@ function generateInvoiceTable(doc, invoice) {
 
   if(position > doc.page.height-100){
     doc.addPage();
+    doc
+        .fillColor("#444444");
     position = 50;
   }
 
