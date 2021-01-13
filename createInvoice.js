@@ -17,7 +17,7 @@ function createInvoice(invoice, path) {
 
 function generateHeader(doc) {
   doc
-    .image("logolong.png", 50, 45, { width: 200 })
+    .image("ltd.png", 50, 45, { width: 200 })
     .fillColor("#444444")
     // .fontSize(20)
     // .text("Grocamie", 110, 57)
